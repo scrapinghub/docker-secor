@@ -95,4 +95,5 @@ java -Xmx$JVM_MEMORY -ea -cp /opt/secor/secor.jar \
   -Dsecor_group=$SECOR_GROUP \
   -Dlog4j.configuration=file:/opt/secor/log4j.docker.properties \
   -Dconfig=/opt/secor/secor.prod.properties \
+  $SECOR_EXTRA_OPTS \
   com.pinterest.secor.main.ConsumerMain
