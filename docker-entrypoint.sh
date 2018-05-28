@@ -55,7 +55,7 @@ if [[ -n "$ZOOKEEPER_QUORUM" ]]; then sed -i -e "s/zookeeper.quorum=.*$/zookeepe
 sed -i -e "s/secor.s3.bucket=.*$/secor.s3.bucket=${SECOR_S3_BUCKET}/" $SECOR_CONFIG_FILE
 sed -i -e "s/secor.s3.path=.*$/secor.s3.path=${SECOR_S3_PATH}/" $SECOR_CONFIG_FILE
 sed -i -e "s/secor.local.path=.*$/secor.local.path=\/tmp\/${SECOR_GROUP}/" $SECOR_CONFIG_FILE
-sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=\/tmp\/${SECOR_GROUP}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=${SECOR_GROUP}/" $SECOR_CONFIG_FILE
 
 # Which Kafka topics to listen to?
 if [[ -n "$SECOR_KAFKA_TOPIC_FILTER" ]]; then sed -i -e "s/secor.kafka.topic_filter=.*$/secor.kafka.topic_filter=${SECOR_KAFKA_TOPIC_FILTER}/" $SECOR_CONFIG_FILE ; fi
