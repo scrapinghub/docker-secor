@@ -23,7 +23,7 @@ repositories {
 }
 
 dependencies {
-    compile ('com.pinterest:secor:0.22') {
+    compile ('com.pinterest:secor:0.25') {
         // exclude kafka 0.8.x
         exclude group: 'org.apache.kafka', module: 'kafka_2.10'
     }
