@@ -41,7 +41,7 @@ services:
             - SECOR_MAX_FILE_SECONDS=5
             - SECOR_GS_BUCKET=kafka_storage
             - SECOR_GS_PATH=test
-            - SECOR_GS_CREDENTIALS_PATH=\/local-data\/google-api-credentials.json
+            - SECOR_GS_CREDENTIALS_PATH=/local-data/google-api-credentials.json
         volumes:
             - ./DO_NOT_COMMIT:/local-data
         depends_on:

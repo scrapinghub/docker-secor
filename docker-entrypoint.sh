@@ -43,16 +43,16 @@ SECOR_CONFIG_FILE=/opt/secor/secor.prod.properties
 # Where to store things in GCS and locally within the container
 sed -i -e "s/secor.gs.bucket=.*$/secor.gs.bucket=${SECOR_GS_BUCKET}/" $SECOR_CONFIG_FILE
 sed -i -e "s/secor.gs.path=.*$/secor.gs.path=${SECOR_GS_PATH}/" $SECOR_CONFIG_FILE
-sed -i -e "s/secor.gs.credentials.path=.*$/secor.gs.credentials.path=${SECOR_GS_CREDENTIALS_PATH}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.gs.credentials.path=.*$/secor.gs.credentials.path=${SECOR_GS_CREDENTIALS_PATH//\//\\\/}/" $SECOR_CONFIG_FILE
 sed -i -e "s/secor.local.path=.*$/secor.local.path=\/tmp\/${SECOR_GROUP}/" $SECOR_CONFIG_FILE
 sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=${SECOR_GROUP}/" $SECOR_CONFIG_FILE
 
 # SSL
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.key.password=.*$/kafka.new.consumer.ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.locationt=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.password=.*$/kafka.new.consumer.ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.location=.*$/kafka.new.consumer.ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.key.password=.*$/kafka.new.consumer.ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.locationt=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.password=.*$/kafka.new.consumer.ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.location=.*$/kafka.new.consumer.ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/kafka.new.consumer.security.protocol=.*$/kafka.new.consumer.security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
 # How to connect to Kafka/ZK
