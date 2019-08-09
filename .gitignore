@@ -1,3 +1,10 @@
 build/
 .gradle/
 .DS_Store
+
+/DO_NOT_COMMIT
+
+# IDE
+.project
+.settings
+.classpath

@@ -1,0 +1,55 @@
+version: '3'
+
+#- services --------------------------------------------------------------------
+
+services:
+    zookeeper:
+        image: 'bitnami/zookeeper:latest'
+        networks:
+            - docker_secor_network
+        environment:
+            - ALLOW_ANONYMOUS_LOGIN=yes
+        ports:
+            - '2181:2181'
+
+    kafka:
+        image: 'bitnami/kafka:latest'
+        networks:
+            - docker_secor_network
+        environment:
+            - ALLOW_PLAINTEXT_LISTENER=yes
+            - KAFKA_CFG_ZOOKEEPER_CONNECT=zookeeper:2181
+        ports:
+            - '9092:9092'
+        depends_on:
+            - zookeeper
+    
+    secor:
+        restart: unless-stopped
+        networks:
+            - docker_secor_network
+        build:
+            context: .
+            dockerfile: Dockerfile
+        environment:
+            - DEBUG=true
+            - SECOR_GROUP=raw_logs
+            - ZOOKEEPER_QUORUM=zookeeper:2181
+            - SECOR_KAFKA_TOPIC_FILTER=test
+            - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.JsonMessageParser
+            - ALLOW_PLAINTEXT_LISTENER=yes
+            - SECOR_MAX_FILE_SECONDS=5
+            - SECOR_GS_BUCKET=kafka_storage
+            - SECOR_GS_PATH=test
+            - SECOR_GS_CREDENTIALS_PATH=\/local-data\/google-api-credentials.json
+        volumes:
+            - ./DO_NOT_COMMIT:/local-data
+        depends_on:
+            - kafka
+        
+
+#- networks --------------------------------------------------------------------
+
+networks:
+    docker_secor_network:
+        driver: bridge
