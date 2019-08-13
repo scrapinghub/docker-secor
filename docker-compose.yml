@@ -37,6 +37,8 @@ services:
             - ZOOKEEPER_QUORUM=zookeeper:2181
             - SECOR_KAFKA_TOPIC_FILTER=test
             - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.JsonMessageParser
+            - SECOR_FILE_READER_WRITER_FACTORY=com.pinterest.secor.io.impl.DelimitedTextFileReaderWriterFactory
+            - SECOR_FILE_EXTENSION=.json
             - ALLOW_PLAINTEXT_LISTENER=yes
             - SECOR_MAX_FILE_SECONDS=5
             - SECOR_GS_BUCKET=kafka_storage
