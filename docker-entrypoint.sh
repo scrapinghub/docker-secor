@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ -n "$ENVIRON_SH" ]]; then 
+  source "${ENVIRON_SH}"
+fi
 
 set -e
 
