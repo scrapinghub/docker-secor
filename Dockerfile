@@ -1,30 +1,24 @@
-FROM java:7
+FROM java:9
 
 RUN apt-get update \
-	&& apt-get install -y --no-install-recommends \
+	&& apt-get install -y --no-install-recommends --allow-unauthenticated \
 		ca-certificates curl wget apt-transport-https libsnappy-dev libssl-dev libbz2-dev python-dev python-pip \
 	&& rm -rf /var/lib/apt/lists/* \
 	&& apt-get clean
 
-# Hadoop
-RUN curl -s http://www.eu.apache.org/dist/hadoop/common/hadoop-2.7.6/hadoop-2.7.6.tar.gz | tar -xz -C /usr/local/
-RUN ln -s /usr/local/hadoop-2.7.6 /usr/local/hadoop
-
-
-ENV JAVA_HOME /usr/lib/jvm/java-7-openjdk-amd64
+ENV JAVA_HOME /usr/lib/jvm/java-9-openjdk-amd64
 ENV LD_LIBRARY_PATH $LD_LIBRARY_PATH:/usr/local/hadoop/lib/native
 ENV PATH $PATH:/usr/local/hadoop/bin
 
-RUN pip install --upgrade awscli
+ENV JAVA_CONF_DIR=$JAVA_HOME/conf
+RUN bash -c '([[ ! -d $JAVA_SECURITY_DIR ]] && ln -s $JAVA_HOME/lib $JAVA_HOME/conf) || (echo "Found java conf dir, package has been fixed, remove this hack"; exit -1)'
 
 ADD . /app
 
 RUN cd /app \
-	&& ./gradlew shadowJar \
 	&& mkdir -p /opt/secor \
 	&& cp /app/build/libs/docker-secor-all.jar /opt/secor/secor.jar \
-	&& rm -rf /app \
-	&& rm -rf ~/.gradle
+	&& rm -rf /app
 
 # Copy script to run Secor
 COPY docker-entrypoint.sh /docker-entrypoint.sh

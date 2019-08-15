@@ -1,4 +1,7 @@
 #!/bin/bash
+if [[ -n "$ENVIRON_SH" ]]; then 
+  source "${ENVIRON_SH}"
+fi
 
 set -e
 
@@ -19,43 +22,46 @@ if [[ -z "$ZOOKEEPER_QUORUM" && -z "$KAFKA_SEED_BROKER_HOST" ]]; then
   exit 1
 fi
 
-# If EITHER is unset
-if [[ -z "$SECOR_S3_BUCKET" || -z "$SECOR_S3_PATH" ]]; then
-  echo "You must set both SECOR_S3_BUCKET and SECOR_S3_PATH."
-  echo "  e.g., launch with -e SECOR_S3_BUCKET=my-bucket -e SECOR_S3_PATH=my-path"
+if [[ -z "$SECOR_GS_BUCKET" ]]; then
+  echo "You must specify the SECOR_GS_BUCKET variable."
+  echo "  e.g., launch with -e SECOR_GS_BUCKET=gs_bucket"
   exit 1
 fi
 
-# If BOTH are set
-if [[ -n "$AWS_ACCESS_KEY" && -n "$AWS_SECRET_KEY" ]]; then
-  # if these vars don't get exported, AWS CLI will fall back to using its own credential lookup
-  export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
-  export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
+if [[ -z "$SECOR_GS_PATH" ]]; then
+  echo "You must specify the SECOR_GS_PATH variable."
+  echo "  e.g., launch with -e SECOR_GS_PATH=gs_path"
+  exit 1
 fi
 
-# Ensure we can access S3
-aws s3 ls s3://$SECOR_S3_BUCKET > /dev/null
+if [[ -z "$SECOR_GS_CREDENTIALS_PATH" ]]; then
+  echo "You must specify the SECOR_GS_CREDENTIALS_PATH variable."
+  echo "  e.g., launch with -e SECOR_GS_CREDENTIALS_PATH=credentials.json"
+  exit 1
+fi
 
 SECOR_CONFIG_FILE=/opt/secor/secor.prod.properties
 
-# AWS Access Credentials
-if [[ -n "$AWS_ACCESS_KEY" ]]; then sed -i -e "s^aws.access.key=.*$^aws.access.key=${AWS_ACCESS_KEY}^" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$AWS_SECRET_KEY" ]]; then sed -i -e "s^aws.secret.key=.*$^aws.secret.key=${AWS_SECRET_KEY}^" $SECOR_CONFIG_FILE ; fi
 
-# AWS S3 Endpoint Config
-if [[ -n "$AWS_REGION" ]]; then sed -i -e "s^aws.region=.*$^aws.region=${AWS_REGION}^" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$AWS_ENDPOINT" ]]; then sed -i -e "s^aws.endpoint=.*$^aws.endpoint=${AWS_ENDPOINT}^" $SECOR_CONFIG_FILE ; fi
+# Where to store things in GCS and locally within the container
+sed -i -e "s/secor.gs.bucket=.*$/secor.gs.bucket=${SECOR_GS_BUCKET}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.gs.path=.*$/secor.gs.path=${SECOR_GS_PATH}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.gs.credentials.path=.*$/secor.gs.credentials.path=${SECOR_GS_CREDENTIALS_PATH//\//\\\/}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.local.path=.*$/secor.local.path=\/tmp\/${SECOR_GROUP}/" $SECOR_CONFIG_FILE
+sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=${SECOR_GROUP}/" $SECOR_CONFIG_FILE
+
+# SSL
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.key.password=.*$/kafka.new.consumer.ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.locationt=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.password=.*$/kafka.new.consumer.ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.location=.*$/kafka.new.consumer.ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/kafka.new.consumer.security.protocol=.*$/kafka.new.consumer.security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
 # How to connect to Kafka/ZK
 if [[ -n "$KAFKA_SEED_BROKER_HOST" ]]; then sed -i -e "s/kafka.seed.broker.host=.*$/kafka.seed.broker.host=${KAFKA_SEED_BROKER_HOST}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_SEED_BROKER_PORT" ]]; then sed -i -e "s/kafka.seed.broker.port=.*$/kafka.seed.broker.port=${KAFKA_SEED_BROKER_PORT}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$ZOOKEEPER_QUORUM" ]]; then sed -i -e "s/zookeeper.quorum=.*$/zookeeper.quorum=${ZOOKEEPER_QUORUM}/" $SECOR_CONFIG_FILE ; fi
-
-# Where to store things in S3 and locally within the container
-sed -i -e "s/secor.s3.bucket=.*$/secor.s3.bucket=${SECOR_S3_BUCKET}/" $SECOR_CONFIG_FILE
-sed -i -e "s/secor.s3.path=.*$/secor.s3.path=${SECOR_S3_PATH}/" $SECOR_CONFIG_FILE
-sed -i -e "s/secor.local.path=.*$/secor.local.path=\/tmp\/${SECOR_GROUP}/" $SECOR_CONFIG_FILE
-sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=${SECOR_GROUP}/" $SECOR_CONFIG_FILE
 
 # Which Kafka topics to listen to?
 if [[ -n "$SECOR_KAFKA_TOPIC_FILTER" ]]; then sed -i -e "s/secor.kafka.topic_filter=.*$/secor.kafka.topic_filter=${SECOR_KAFKA_TOPIC_FILTER}/" $SECOR_CONFIG_FILE ; fi
@@ -91,6 +97,8 @@ if [[ -n "$KAFKA_DUAL_COMMIT_ENABLED" ]]; then sed -i -e "s/kafka.dual.commit.en
 if [[ -n "$SECOR_OSTRICH_PORT" ]]; then sed -i -e "s/ostrich.port=.*$/ostrich.port=${SECOR_OSTRICH_PORT}/" $SECOR_CONFIG_FILE ; fi
 
 JVM_MEMORY=${JVM_MEMORY:-512m}
+
+# cat $SECOR_CONFIG_FILE
 
 java -Xmx$JVM_MEMORY -ea -cp /opt/secor/secor.jar \
   -Dsecor_group=$SECOR_GROUP \
