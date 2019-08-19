@@ -3,19 +3,24 @@ version: 2
 jobs:
   build:
     docker:
-      - image: java:9
+    - image: circleci/python:2.7-stretch
     steps:
-      - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+    - checkout
+    - setup_remote_docker:
+        docker_layer_caching: true
+    - run: |
+        # Docker login
+        docker login -u $DOCKER_USER -p $DOCKER_PASS images.scrapinghub.com
 
-      - run: |
-          docker build --pull -t docker-secor .
-      - run: |
-          export IMAGE_NAME="images.scrapinghub.com/docker-secor/${CIRCLE_BRANCH}"
-          export IMAGE_TAG="${CIRCLE_SHA1:0:7}"
-          docker login -u $DOCKER_USER -p $DOCKER_PASS images.scrapinghub.com
-          docker tag docker-secor "${IMAGE_NAME}:${IMAGE_TAG}"
-          docker tag docker-secor "${IMAGE_NAME}:latest"
-          docker push "${IMAGE_NAME}:${IMAGE_TAG}"
-          docker push "${IMAGE_NAME}:latest"
+        # Build image
+        docker build -t images.scrapinghub.com/${SH_TEAM}/secor:${CIRCLE_SHA1:0:7} .
+
+        # Push image
+        docker push images.scrapinghub.com/${SH_TEAM}/secor:${CIRCLE_SHA1:0:7}
+
+        # Tag as latest if master and push
+        if [ "${CIRCLE_BRANCH}" == "master" ]; then
+          docker tag images.scrapinghub.com/${SH_TEAM}/secor:${CIRCLE_SHA1:0:7} images.scrapinghub.com/${SH_TEAM}/secor:latest
+          docker push images.scrapinghub.com/${SH_TEAM}/secor:latest
+        fi
+
