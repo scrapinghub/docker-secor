@@ -25,7 +25,7 @@ services:
             - zookeeper
     
     secor:
-        restart: unless-stopped
+        #restart: unless-stopped
         networks:
             - docker_secor_network
         build:
