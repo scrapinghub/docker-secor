@@ -65,6 +65,8 @@ if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/ssl
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.truststore.password=.*$/ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/security.protocol=.*$/security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
+if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/security.inter.broker.protocol=.*$/security.inter.broker.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
+
 # How to connect to Kafka/ZK
 if [[ -n "$KAFKA_SEED_BROKER_HOST" ]]; then sed -i -e "s/kafka.seed.broker.host=.*$/kafka.seed.broker.host=${KAFKA_SEED_BROKER_HOST}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_SEED_BROKER_PORT" ]]; then sed -i -e "s/kafka.seed.broker.port=.*$/kafka.seed.broker.port=${KAFKA_SEED_BROKER_PORT}/" $SECOR_CONFIG_FILE ; fi
