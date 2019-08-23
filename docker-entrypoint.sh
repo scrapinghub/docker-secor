@@ -105,7 +105,7 @@ if [[ -n "$SECOR_OSTRICH_PORT" ]]; then sed -i -e "s/ostrich.port=.*$/ostrich.po
 
 JVM_MEMORY=${JVM_MEMORY:-512m}
 
-# cat $SECOR_CONFIG_FILE
+cat $SECOR_CONFIG_FILE
 
 java -Xmx$JVM_MEMORY -ea -cp /opt/secor/secor.jar \
   -Dsecor_group=$SECOR_GROUP \
