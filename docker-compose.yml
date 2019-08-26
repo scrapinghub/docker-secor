@@ -36,7 +36,7 @@ services:
             - SECOR_GROUP=raw_logs
             - ZOOKEEPER_QUORUM=zookeeper:2181
             - SECOR_KAFKA_TOPIC_FILTER=test
-            - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.JsonMessageParser
+            - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.DateMessageParser
             - SECOR_FILE_READER_WRITER_FACTORY=com.pinterest.secor.io.impl.DelimitedTextFileReaderWriterFactory
             - SECOR_FILE_EXTENSION=.json
             - ALLOW_PLAINTEXT_LISTENER=yes
@@ -45,6 +45,9 @@ services:
             - SECOR_GS_PATH=test
             - SECOR_GS_CREDENTIALS_PATH=/local-data/google-api-credentials.json
             - ENVIRON_SH=/local-data/environ.sh
+            - SECOR_TIMESTAMP_NAME=name
+            - SECOR_TIMESTAMP_PATTERN=yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
+            - KAFA_ZOOKEEPER_PATH=/
         volumes:
             - ./DO_NOT_COMMIT:/local-data
         depends_on:
