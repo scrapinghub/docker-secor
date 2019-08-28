@@ -29,6 +29,10 @@ COPY docker-entrypoint.sh /docker-entrypoint.sh
 # Copy out properties files
 COPY *.properties /opt/secor/
 
+# Copy Secor and dependencies JAR files
+COPY --from=build /build/target/secor-*.jar /opt/secor/
+COPY --from=build /build/target/lib /opt/secor/lib
+
 ENTRYPOINT ["/docker-entrypoint.sh"]
 
 # used for temp-files that are uploaded
