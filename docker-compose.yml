@@ -45,7 +45,7 @@ services:
             - SECOR_GS_PATH=test
             - SECOR_GS_CREDENTIALS_PATH=/local-data/google-api-credentials.json
             - ENVIRON_SH=/local-data/environ.sh
-            - SECOR_TIMESTAMP_NAME=name
+            - SECOR_TIMESTAMP_NAME=time
             - SECOR_TIMESTAMP_PATTERN=yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
             - KAFA_ZOOKEEPER_PATH=/
         volumes:

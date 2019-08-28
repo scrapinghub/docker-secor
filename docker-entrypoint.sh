@@ -58,11 +58,11 @@ if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kaf
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/kafka.new.consumer.security.protocol=.*$/kafka.new.consumer.security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/ssl.key.password=.*$/ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/ssl.keystore.location=.*$/ssl.keystore.location=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.keystore.password=.*$/ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/ssl.truststore.location=.*$/ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.truststore.password=.*$/ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/ssl.key.password=.*$/ssl.key.password=${KAFKA_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/ssl.keystore.location=.*$/ssl.keystore.location=${KAFKA_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.keystore.password=.*$/ssl.keystore.password=${KAFKA_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/ssl.truststore.location=.*$/ssl.truststore.location=${KAFKA_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.truststore.password=.*$/ssl.truststore.password=${KAFKA_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/security.protocol=.*$/security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/security.inter.broker.protocol=.*$/security.inter.broker.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
