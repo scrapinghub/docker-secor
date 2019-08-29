@@ -5,7 +5,7 @@ WORKDIR /build
 
 RUN git clone --branch v0.27 --depth 1 --single-branch https://github.com/pinterest/secor.git .
 
-RUN mvn -Pkafka-1.0.0 package
+RUN mvn -Pkafka-2.0.0 package
 
 # Build the container image using a clean java:9 base
 FROM java:9
