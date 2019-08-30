@@ -59,7 +59,7 @@ if [[ -n "$KAFKA_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/ssl.truststore.p
 if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/security.protocol=.*$/security.protocol=${KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL}/" $SECOR_CONFIG_FILE ; fi
 
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.key.password=.*$/kafka.new.consumer.ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.locationt=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.location=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.password=.*$/kafka.new.consumer.ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.location=.*$/kafka.new.consumer.ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
@@ -117,7 +117,7 @@ JVM_MEMORY=${JVM_MEMORY:-512m}
 
 cat $SECOR_CONFIG_FILE
 
-java -Xmx$JVM_MEMORY -ea -cp /opt/secor/secor.jar \
+java -Xmx$JVM_MEMORY -ea -cp "*:/opt/secor/*:/opt/secor/lib/*" \
   -Dsecor_group=$SECOR_GROUP \
   -Dlog4j.configuration=file:/opt/secor/log4j.docker.properties \
   -Dconfig=/opt/secor/secor.prod.properties \
