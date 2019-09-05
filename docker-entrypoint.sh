@@ -77,6 +77,9 @@ if [[ -n "$SECOR_FILE_READER_WRITER_FACTORY" ]]; then sed -i -e "s/secor.file.re
 if [[ -n "$SECOR_COMPRESSION_CODEC" ]]; then sed -i -e "s/secor.compression.codec=.*$/secor.compression.codec=${SECOR_COMPRESSION_CODEC}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_FILE_EXTENSION" ]]; then sed -i -e "s/secor.file.extension=.*$/secor.file.extension=${SECOR_FILE_EXTENSION}/" $SECOR_CONFIG_FILE ; fi
 
+# Message transformation
+if [[ -n "$SECOR_MESSAGE_TRANSFORMER_CLASS" ]]; then sed -i -e "s/secor.message.transformer.class=.*$/secor.message.transformer.class=${SECOR_MESSAGE_TRANSFORMER_CLASS}/" $SECOR_CONFIG_FILE ; fi
+
 # If using Timestamp parser
 if [[ -n "$SECOR_TIMESTAMP_NAME" ]]; then sed -i -e "s/message.timestamp.name=.*$/message.timestamp.name=${SECOR_TIMESTAMP_NAME}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_TIMESTAMP_PATTERN" ]]; then sed -i -e "s/message.timestamp.input.pattern=.*$/message.timestamp.input.pattern=${SECOR_TIMESTAMP_PATTERN}/" $SECOR_CONFIG_FILE ; fi

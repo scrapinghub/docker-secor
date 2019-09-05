@@ -4,6 +4,7 @@ FROM maven:3-jdk-8 AS build
 WORKDIR /build
 
 RUN git clone --branch v0.27 --depth 1 --single-branch https://github.com/pinterest/secor.git .
+COPY build/JsonMessageTransformer.java /build/src/main/java/com/pinterest/secor/transformer/JsonMessageTransformer.java
 
 RUN mvn -Pkafka-2.0.0 package
 

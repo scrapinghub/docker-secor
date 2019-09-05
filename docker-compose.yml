@@ -33,11 +33,12 @@ services:
             dockerfile: Dockerfile
         environment:
             - DEBUG=true
-            - SECOR_GROUP=raw_logs
+            - SECOR_GROUP=raw_logs_test
             - ZOOKEEPER_QUORUM=zookeeper:2181
             - SECOR_KAFKA_TOPIC_FILTER=test
             - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.DateMessageParser
             - SECOR_FILE_READER_WRITER_FACTORY=com.pinterest.secor.io.impl.DelimitedTextFileReaderWriterFactory
+            - SECOR_MESSAGE_TRANSFORMER_CLASS=com.pinterest.secor.transformer.JsonMessageTransformer
             - SECOR_FILE_EXTENSION=.json
             - ALLOW_PLAINTEXT_LISTENER=yes
             - SECOR_MAX_FILE_SECONDS=5
@@ -48,6 +49,8 @@ services:
             - SECOR_TIMESTAMP_NAME=time
             - SECOR_TIMESTAMP_PATTERN=yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
             - KAFA_ZOOKEEPER_PATH=/
+            - KAFKA_SEED_BROKER_HOST=kafka
+            - KAFKA_SEED_BROKER_PORT=9092
         volumes:
             - ./DO_NOT_COMMIT:/local-data
         depends_on:
