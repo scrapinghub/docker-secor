@@ -71,6 +71,7 @@ if [[ -n "$SECOR_KAFKA_TOPIC_BLACKLIST" ]]; then sed -i -e "s/secor.kafka.topic_
 # Max file size/ages
 if [[ -n "$SECOR_MAX_FILE_BYTES" ]]; then sed -i -e "s/secor.max.file.size.bytes=.*$/secor.max.file.size.bytes=${SECOR_MAX_FILE_BYTES}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_MAX_FILE_SECONDS" ]]; then sed -i -e "s/secor.max.file.age.seconds=.*$/secor.max.file.age.seconds=${SECOR_MAX_FILE_SECONDS}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$SECOR_FILE_AGE_YANGEST" ]]; then sed -i -e "s/secor.file.age.youngest=.*$/secor.file.age.youngest=${SECOR_FILE_AGE_YANGEST}/" $SECOR_CONFIG_FILE ; fi
 
 # Output config
 if [[ -n "$SECOR_FILE_READER_WRITER_FACTORY" ]]; then sed -i -e "s/secor.file.reader.writer.factory=.*$/secor.file.reader.writer.factory=${SECOR_FILE_READER_WRITER_FACTORY}/" $SECOR_CONFIG_FILE ; fi

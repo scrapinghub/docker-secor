@@ -33,15 +33,17 @@ services:
             dockerfile: Dockerfile
         environment:
             - DEBUG=true
-            - SECOR_GROUP=raw_logs_test
+            - SECOR_GROUP=raw_logs
             - ZOOKEEPER_QUORUM=zookeeper:2181
             - SECOR_KAFKA_TOPIC_FILTER=test
             - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.DateMessageParser
             - SECOR_FILE_READER_WRITER_FACTORY=com.pinterest.secor.io.impl.DelimitedTextFileReaderWriterFactory
             - SECOR_MESSAGE_TRANSFORMER_CLASS=com.pinterest.secor.transformer.JsonMessageTransformer
-            - SECOR_FILE_EXTENSION=.json
+            - SECOR_COMPRESSION_CODEC=org.apache.hadoop.io.compress.GzipCodec
+            - SECOR_FILE_EXTENSION=.gz
             - ALLOW_PLAINTEXT_LISTENER=yes
             - SECOR_MAX_FILE_SECONDS=5
+            - SECOR_FILE_AGE_YANGEST=false
             - SECOR_GS_BUCKET=kafka_storage
             - SECOR_GS_PATH=test
             - SECOR_GS_CREDENTIALS_PATH=/local-data/google-api-credentials.json
