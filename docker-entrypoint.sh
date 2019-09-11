@@ -105,6 +105,7 @@ JVM_MEMORY=${JVM_MEMORY:-512m}
 
 cat $SECOR_CONFIG_FILE
 
+ulimit -c unlimited
 java -Xmx$JVM_MEMORY -ea -cp "*:/opt/secor/*:/opt/secor/lib/*" \
   -Dsecor_group=$SECOR_GROUP \
   -Dlog4j.configuration=file:/opt/secor/log4j.docker.properties \
