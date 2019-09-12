@@ -25,7 +25,7 @@ services:
             - zookeeper
     
     secor:
-        restart: unless-stopped
+        #restart: unless-stopped
         networks:
             - docker_secor_network
         build:
@@ -36,15 +36,23 @@ services:
             - SECOR_GROUP=raw_logs
             - ZOOKEEPER_QUORUM=zookeeper:2181
             - SECOR_KAFKA_TOPIC_FILTER=test
-            - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.JsonMessageParser
+            - SECOR_MESSAGE_PARSER_CLASS=com.pinterest.secor.parser.DateMessageParser
             - SECOR_FILE_READER_WRITER_FACTORY=com.pinterest.secor.io.impl.DelimitedTextFileReaderWriterFactory
-            - SECOR_FILE_EXTENSION=.json
+            - SECOR_MESSAGE_TRANSFORMER_CLASS=com.pinterest.secor.transformer.JsonMessageTransformer
+            - SECOR_COMPRESSION_CODEC=org.apache.hadoop.io.compress.GzipCodec
+            - SECOR_FILE_EXTENSION=.gz
             - ALLOW_PLAINTEXT_LISTENER=yes
             - SECOR_MAX_FILE_SECONDS=5
+            - SECOR_FILE_AGE_YANGEST=false
             - SECOR_GS_BUCKET=kafka_storage
             - SECOR_GS_PATH=test
             - SECOR_GS_CREDENTIALS_PATH=/local-data/google-api-credentials.json
             - ENVIRON_SH=/local-data/environ.sh
+            - SECOR_TIMESTAMP_NAME=time
+            - SECOR_TIMESTAMP_PATTERN=yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'
+            - KAFA_ZOOKEEPER_PATH=/
+            - KAFKA_SEED_BROKER_HOST=kafka
+            - KAFKA_SEED_BROKER_PORT=9092
         volumes:
             - ./DO_NOT_COMMIT:/local-data
         depends_on:

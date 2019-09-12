@@ -52,7 +52,7 @@ sed -i -e "s/secor.kafka.group=.*$/secor.kafka.group=${SECOR_GROUP}/" $SECOR_CON
 
 # SSL
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.key.password=.*$/kafka.new.consumer.ssl.key.password=${KAFKA_NEW_CONSUMER_SSL_KEY_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.locationt=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.location=.*$/kafka.new.consumer.ssl.keystore.location=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.keystore.password=.*$/kafka.new.consumer.ssl.keystore.password=${KAFKA_NEW_CONSUMER_SSL_KEYSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.location=.*$/kafka.new.consumer.ssl.truststore.location=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_LOCATION//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD" ]]; then sed -i -e "s/kafka.new.consumer.ssl.truststore.password=.*$/kafka.new.consumer.ssl.truststore.password=${KAFKA_NEW_CONSUMER_SSL_TRUSTSTORE_PASSWORD//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
@@ -61,7 +61,8 @@ if [[ -n "$KAFKA_NEW_CONSUMER_SECURITY_PROTOCOL" ]]; then sed -i -e "s/kafka.new
 # How to connect to Kafka/ZK
 if [[ -n "$KAFKA_SEED_BROKER_HOST" ]]; then sed -i -e "s/kafka.seed.broker.host=.*$/kafka.seed.broker.host=${KAFKA_SEED_BROKER_HOST}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$KAFKA_SEED_BROKER_PORT" ]]; then sed -i -e "s/kafka.seed.broker.port=.*$/kafka.seed.broker.port=${KAFKA_SEED_BROKER_PORT}/" $SECOR_CONFIG_FILE ; fi
-if [[ -n "$ZOOKEEPER_QUORUM" ]]; then sed -i -e "s/zookeeper.quorum=.*$/zookeeper.quorum=${ZOOKEEPER_QUORUM}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$ZOOKEEPER_QUORUM" ]]; then sed -i -e "s/zookeeper.quorum=.*$/zookeeper.quorum=${ZOOKEEPER_QUORUM//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$KAFA_ZOOKEEPER_PATH" ]]; then sed -i -e "s/kafka.zookeeper.path=.*$/kafka.zookeeper.path=${KAFA_ZOOKEEPER_PATH//\//\\\/}/" $SECOR_CONFIG_FILE ; fi
 
 # Which Kafka topics to listen to?
 if [[ -n "$SECOR_KAFKA_TOPIC_FILTER" ]]; then sed -i -e "s/secor.kafka.topic_filter=.*$/secor.kafka.topic_filter=${SECOR_KAFKA_TOPIC_FILTER}/" $SECOR_CONFIG_FILE ; fi
@@ -70,11 +71,15 @@ if [[ -n "$SECOR_KAFKA_TOPIC_BLACKLIST" ]]; then sed -i -e "s/secor.kafka.topic_
 # Max file size/ages
 if [[ -n "$SECOR_MAX_FILE_BYTES" ]]; then sed -i -e "s/secor.max.file.size.bytes=.*$/secor.max.file.size.bytes=${SECOR_MAX_FILE_BYTES}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_MAX_FILE_SECONDS" ]]; then sed -i -e "s/secor.max.file.age.seconds=.*$/secor.max.file.age.seconds=${SECOR_MAX_FILE_SECONDS}/" $SECOR_CONFIG_FILE ; fi
+if [[ -n "$SECOR_FILE_AGE_YANGEST" ]]; then sed -i -e "s/secor.file.age.youngest=.*$/secor.file.age.youngest=${SECOR_FILE_AGE_YANGEST}/" $SECOR_CONFIG_FILE ; fi
 
 # Output config
 if [[ -n "$SECOR_FILE_READER_WRITER_FACTORY" ]]; then sed -i -e "s/secor.file.reader.writer.factory=.*$/secor.file.reader.writer.factory=${SECOR_FILE_READER_WRITER_FACTORY}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_COMPRESSION_CODEC" ]]; then sed -i -e "s/secor.compression.codec=.*$/secor.compression.codec=${SECOR_COMPRESSION_CODEC}/" $SECOR_CONFIG_FILE ; fi
 if [[ -n "$SECOR_FILE_EXTENSION" ]]; then sed -i -e "s/secor.file.extension=.*$/secor.file.extension=${SECOR_FILE_EXTENSION}/" $SECOR_CONFIG_FILE ; fi
+
+# Message transformation
+if [[ -n "$SECOR_MESSAGE_TRANSFORMER_CLASS" ]]; then sed -i -e "s/secor.message.transformer.class=.*$/secor.message.transformer.class=${SECOR_MESSAGE_TRANSFORMER_CLASS}/" $SECOR_CONFIG_FILE ; fi
 
 # If using Timestamp parser
 if [[ -n "$SECOR_TIMESTAMP_NAME" ]]; then sed -i -e "s/message.timestamp.name=.*$/message.timestamp.name=${SECOR_TIMESTAMP_NAME}/" $SECOR_CONFIG_FILE ; fi
@@ -98,9 +103,10 @@ if [[ -n "$SECOR_OSTRICH_PORT" ]]; then sed -i -e "s/ostrich.port=.*$/ostrich.po
 
 JVM_MEMORY=${JVM_MEMORY:-512m}
 
-# cat $SECOR_CONFIG_FILE
+cat $SECOR_CONFIG_FILE
 
-java -Xmx$JVM_MEMORY -ea -cp /opt/secor/secor.jar \
+ulimit -c unlimited
+java -Xmx$JVM_MEMORY -ea -cp "*:/opt/secor/*:/opt/secor/lib/*" \
   -Dsecor_group=$SECOR_GROUP \
   -Dlog4j.configuration=file:/opt/secor/log4j.docker.properties \
   -Dconfig=/opt/secor/secor.prod.properties \
