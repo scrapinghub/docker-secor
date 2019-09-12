@@ -103,7 +103,7 @@ if [[ -n "$SECOR_OSTRICH_PORT" ]]; then sed -i -e "s/ostrich.port=.*$/ostrich.po
 
 JVM_MEMORY=${JVM_MEMORY:-512m}
 
-cat $SECOR_CONFIG_FILE
+#cat $SECOR_CONFIG_FILE
 
 ulimit -c unlimited
 java -Xmx$JVM_MEMORY -ea -cp "*:/opt/secor/*:/opt/secor/lib/*" \
