@@ -18,19 +18,7 @@ public class JsonMessageTransformer extends IdentityMessageTransformer {
 
     @Override
     public Message transform(Message message) {
-        JSONObject jsonObject = (JSONObject) JSONValue.parse(
-            message.getPayload()
-        );
-        String messageJsonString = (String) jsonObject.get("payload");
-        byte[] payload = messageJsonString.getBytes();
-        return new Message(
-            message.getTopic(),
-            message.getKafkaPartition(),
-            message.getOffset(),
-            message.getKafkaKey(),
-            payload,
-            message.getTimestamp()
-        );
+        return message
     }
 
 }
