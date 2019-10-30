@@ -21,7 +21,7 @@ public class JsonMessageTransformer extends IdentityMessageTransformer {
         JSONObject jsonObject = (JSONObject) JSONValue.parse(
             message.getPayload()
         );
-        String messageJsonString = (String) jsonObject.get("message");
+        String messageJsonString = (String) jsonObject.get("payload");
         byte[] payload = messageJsonString.getBytes();
         return new Message(
             message.getTopic(),
