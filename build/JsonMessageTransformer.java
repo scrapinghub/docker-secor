@@ -18,7 +18,7 @@ public class JsonMessageTransformer extends IdentityMessageTransformer {
 
     @Override
     public Message transform(Message message) {
-        return message
+        return message;
     }
 
 }
