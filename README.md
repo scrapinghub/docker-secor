@@ -1,3 +1,5 @@
+This is a temporary branch for reading from `crawlera_requests_processed` topic
+
 # Secor 0.22 _(Kafka 0.10.0.1)_
 
 This project uses Docker to produce a Docker image containing an uber-jar (single jar containing all dependencies) version of Pinterest Secor (https://github.com/pinterest/secor).
