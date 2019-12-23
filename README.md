@@ -1,4 +1,4 @@
-This is a temporary branch for reading from `crawlera_requests_processed` topic
+This is a temporary branch for reading from `crawlera_samples` topic
 
 # Secor 0.22 _(Kafka 0.10.0.1)_
 
